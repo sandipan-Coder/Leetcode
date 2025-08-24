@@ -2,29 +2,20 @@ class Solution {
 public:
     int longestSubarray(vector<int>& nums) {
 
-        int n = nums.size();
-        int len = 0;
-        vector<int> countOnes;
-        int count = 0;
-
-        for(int ele: nums){
-
-            if(ele == 1)
-                count++;
-            else {
-                countOnes.push_back(count);
-                count = 0;
+        int left = 0, zeroCount = 0, maxLen = 0;
+    
+        for (int right = 0; right < nums.size(); right++) {
+            if (nums[right] == 0) zeroCount++;
+            
+            while (zeroCount > 1) {
+                if (nums[left] == 0) zeroCount--;
+                left++;
             }
+            
+            maxLen = max(maxLen, right - left); 
+            // notice right - left, not +1, because we must delete one element
         }
-
-        countOnes.push_back(count);
-
-        if(countOnes.size() == 1)
-            return n - 1;
-
-        for(int i = 0; i < countOnes.size() - 1; i++)
-            len = max(len, countOnes[i] + countOnes[i + 1]);
-
-        return len;
+        
+        return maxLen;
     }
 };
