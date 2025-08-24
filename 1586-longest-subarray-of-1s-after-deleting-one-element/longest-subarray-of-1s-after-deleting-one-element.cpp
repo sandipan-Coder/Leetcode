@@ -3,39 +3,28 @@ public:
     int longestSubarray(vector<int>& nums) {
 
         int n = nums.size();
-        int len = INT_MIN;
-        unordered_map<int, int> mp;
+        int len = 0;
+        vector<int> countOnes;
         int count = 0;
-        int prevIdx = -1;
-        
-        for(int i = 0; i < n; i++){
 
-            if(nums[i] == 0){
-                if(prevIdx == -1){
-                    prevIdx = i;
-                    mp[prevIdx] += count;
-                    count = 0;
-                }
-                    
-                else {
-                    mp[prevIdx] += count;
-                    mp[i] = count;
-                    prevIdx = i;
-                    count = 0;
-                }
-            }
-            else
+        for(int ele: nums){
+
+            if(ele == 1)
                 count++;
+            else {
+                countOnes.push_back(count);
+                count = 0;
+            }
         }
 
-        mp[prevIdx] += count;
+        countOnes.push_back(count);
 
-        for(auto it: mp){
-            int freq = it.second;
+        if(countOnes.size() == 1)
+            return n - 1;
 
-            len = max(len, freq);
-        }
+        for(int i = 0; i < countOnes.size() - 1; i++)
+            len = max(len, countOnes[i] + countOnes[i + 1]);
 
-        return (count == n) ? n-1 : len;
+        return len;
     }
 };
