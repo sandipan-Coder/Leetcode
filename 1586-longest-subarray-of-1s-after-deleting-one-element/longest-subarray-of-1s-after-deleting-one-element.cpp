@@ -4,7 +4,7 @@ public:
 
         int n = nums.size();
         int len = INT_MIN;
-        map<int, int> mp;
+        unordered_map<int, int> mp;
         int count = 0;
         int prevIdx = -1;
         
