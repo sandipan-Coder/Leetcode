@@ -1,48 +1,53 @@
 class Solution {
+    vector<vector<int>> directions = {{1, 1}, {1, -1}, {-1, -1}, {-1, 1}};
     int n, m;
-    vector<int> dx = {-1, 1, 1, -1};
-    vector<int> dy = {1, 1, -1, -1};
+
 private:
 
-    int f(int x, int y, int dirNo, int turns, vector<vector<int>>& grid){
-        int maxi = 1, nx, ny, val, newTurns;
-        nx = x + dx[dirNo];
-        ny = y + dy[dirNo];
-        int turnOff = 1;
-        if(nx >= 0 and ny >= 0 and nx <= n-1 and ny <= m-1 and abs(grid[x][y] - grid[nx][ny]) == 2){
-            turnOff = 1 + f(nx, ny, dirNo, turns, grid);
+    bool check(int row, int col){
+        return (row >= 0 && col >= 0 && row < n && col < m);
+    }
+
+    int solve(int row, int col, int dIdx, bool canTurn, vector<vector<int>>& grid, int val){
+
+        int newRow = row + directions[dIdx][0];
+        int newCol = col + directions[dIdx][1];
+
+        if(!check(newRow, newCol) || grid[newRow][newCol] != val)
+            return 0;
+        
+        int len = 0;
+
+        int keepMoving = 1 + solve(newRow, newCol, dIdx, canTurn, grid, (val == 0) ? 2 : 0);
+        
+        len = max(len, keepMoving);
+
+        if(canTurn){
+            len = max(len, 1 + solve(newRow, newCol, (dIdx + 1) % 4, false, grid, (val == 0) ? 2 : 0));
         }
-        int turnOn = 1;
-        nx = x + dx[(dirNo + 1) % 4];
-        ny = y + dy[(dirNo + 1) % 4];
-        if(turns == 0 and nx >= 0 and ny >= 0 and nx <= n-1 and ny <= m-1 and abs(grid[x][y] - grid[nx][ny]) == 2){
-            turnOn = 1 + f(nx, ny, (dirNo + 1)%4, turns+1, grid);
-        }
-        return max(turnOff, turnOn);
+
+        return len;
     }
 
 public:
     int lenOfVDiagonal(vector<vector<int>>& grid) {
         
-        n = grid.size(), m = grid[0].size();
-        int maxi = 0;
-        for(int i = 0;i<n;i++){
-            for(int j = 0;j<m;j++){
-                if(grid[i][j] == 1){
-                    maxi = max(maxi, 1);
-                    int nx, ny;
-                    for(int dirNo = 0;dirNo<4;dirNo++){
-                        nx = i + dx[dirNo];
-                        ny = j + dy[dirNo];
-                        if(nx < 0 or ny < 0 or nx > n-1 or ny > m-1 or grid[nx][ny] == 1 or grid[nx][ny] == 0)
-                            continue;
-                        int val = 1 + f(nx, ny, dirNo, 0, grid);
-                        maxi = max(maxi, val);
+        n = grid.size();
+        m = grid[0].size();
+        int ans = 0;
+
+        for(int i = 0; i < n; i++){
+            for(int j = 0; j < m; j++){
+                // This is for direction array loop.
+                for(int d = 0; d <= 3; d++){
+                    if(grid[i][j] == 1){
+                        ans = max(ans, 1 + solve(i, j, d, true, grid, 2));
                     }
                 }
+                
             }
         }
-        
-        return maxi;
+
+        return ans;
     }
 };
