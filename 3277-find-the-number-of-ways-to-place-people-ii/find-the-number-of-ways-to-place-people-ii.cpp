@@ -4,7 +4,7 @@ public:
         
         int n = points.size();
         int ans = 0;
-        sort(points.begin(), points.end(), [](vector<int> a, vector<int> b){
+        sort(points.begin(), points.end(), [&](vector<int> &a, vector<int> &b){
 
             if(a[0] == b[0])
                 return a[1] > b[1];
