@@ -45,7 +45,6 @@ public:
         }
 
         swap(first->val, last->val);
-        
         return head;
     }
 };
