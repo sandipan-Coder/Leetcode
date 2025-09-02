@@ -4,30 +4,29 @@ public:
         
         int n = points.size();
         int ans = 0;
+        sort(points.begin(), points.end(), [&](vector<int> &a, vector<int> &b){
+
+            if(a[0] == b[0])
+                return a[1] > b[1];
+            
+            return a[0] < b[0];
+        });
 
         for(int i = 0; i < n; i++){
             int cx = points[i][0];
             int cy = points[i][1];
-            for(int j = 0; j < n; j++){
+            int mark = INT_MIN;
+
+            for(int j = i+1; j < n; j++){
                 int tx = points[j][0];
                 int ty = points[j][1];
 
-                if(i == j || cx > tx || ty > cy)
+                if(ty > cy)
                     continue;
-                
-                bool flag = true;
-                for(int k = 0; k < n; k++){
-
-                    if(k == i || k == j)
-                        continue;
-                    if(points[k][0] >= cx && points[k][0] <= tx && points[k][1] >= ty && points[k][1] <= cy ){
-                        flag = false;
-                        break;
-                    }
-                }
-
-                if(flag)
+                if(ty > mark){
                     ans++;
+                    mark = ty;
+                }
             }
         }
 
