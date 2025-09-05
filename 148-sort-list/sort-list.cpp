@@ -12,8 +12,8 @@ class Solution {
 public:
 
     //MergeSort Function O(n*logn)
-    ListNode* mergelist(ListNode *l1, ListNode *l2)
-    {
+    ListNode* mergelist(ListNode *l1, ListNode *l2) {
+
         ListNode *ptr = new ListNode(0);
         ListNode *curr = ptr;
         
@@ -34,12 +34,12 @@ public:
         
         if(l1 != NULL){
             curr -> next = l1;
-            l1 = l1->next;
+            // l1 = l1->next;
         }
         
         if(l2 != NULL){
             curr -> next = l2;
-            l2 = l2 ->next;
+            // l2 = l2 ->next;
         }
         
         return ptr->next;
