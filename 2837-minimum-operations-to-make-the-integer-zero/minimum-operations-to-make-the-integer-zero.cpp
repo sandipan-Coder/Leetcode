@@ -4,17 +4,20 @@ public:
         
         if(num2 > num1)
             return -1;
+        int op = 0;
 
-        for(int i = 0; i <= 60; i++){
+        while(true){
 
-            long long int target = num1 - i*1LL*num2;
-            if(target <= 0)
+            long long val = (long long)num1 - (long long)op*num2;
+
+            if(val < 0)
                 return -1;
 
-            long long int bits = __builtin_popcountll(target);
-            if(bits <= i && target >= i)
-                return i;
+            if(__builtin_popcountll(val) <= op && op <= val)
+                return op;
+            op++;
         }
+        
 
         return -1;
     }
