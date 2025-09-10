@@ -1,16 +1,8 @@
 class Solution {
 public:
     int minimumTeachings(int n, vector<vector<int>>& languages, vector<vector<int>>& friendships) {
-        
-        // int users = languages.size();
-        // map<int, unordered_set<int>> mp;  // This store (User -> known languages)
-
-        // // This store one User is known by how many languages.
-        // for(int i = 0; i < users; i++){
-        //     for(int j = 0; j < languages[i].size(); j++)
-        //         mp[i + 1].insert(languages[i][j]);  
-        // }
-
+        // Step1 :- Store this friendships which have not any common language.
+        // This set is store this friendships which have not any common language.
         unordered_set<int> st;
         for(int i = 0; i < friendships.size(); i++){
             int user1 = friendships[i][0];
@@ -33,20 +25,22 @@ public:
             } 
         }
 
+        // Step2 :- Store the frequencies of languages of this friendships which have not any common language.
         unordered_map<int, int> mp;
         for(auto it: st){
             for(int i = 0; i < languages[it - 1].size(); i++)
                 mp[languages[it - 1][i]]++;
         }
 
+        // Step3 :- Find the maximum frequency of language
         int count = 0;
         for(auto it: mp){
             int noOfKnownPeople = it.second;
             count = max(count, noOfKnownPeople);
         }
 
-        int unfriend = st.size();
-
-        return unfriend - count;
+        // Step4 :- Difference of No. of users who are friends but don't have any common language with maximum frequency language.
+        int unCommon = st.size();
+        return unCommon - count;
     }
 };
