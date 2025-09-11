@@ -2,20 +2,15 @@ class Solution {
 public:
     int singleNumber(vector<int>& nums) {
         
-        int ans = 0;
-        int n = nums.size();
+        int one = 0;
+        int two = 0;
 
-        for(int bit = 0; bit < 32; bit++){
-            int count = 0;
-            for(int i = 0; i < n; i++){
-                if(nums[i] & (1 << bit))
-                    count++;
-            }
+        for(int ele: nums){
 
-            if(count % 3)
-                ans |= (1 << bit);
+            one = (one ^ ele) & (~ two);
+            two = (two ^ ele) & (~ one);
         }
 
-        return ans;
+        return one;
     }
 };
