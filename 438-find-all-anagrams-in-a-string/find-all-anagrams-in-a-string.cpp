@@ -1,4 +1,6 @@
 class Solution {
+    vector<int> target;
+    vector<int> window;
 public:
     vector<int> findAnagrams(string s, string p) {
         
@@ -8,10 +10,10 @@ public:
 
         if(m > n)
             return ans;
-            
-        vector<int> target(26, 0);
-        vector<int> window(26, 0);
 
+        target.assign(26, 0);
+        window.assign(26, 0);
+            
         // Count frequencies of each character in the string P.
         for(char ch: p)
             target[ch - 'a']++;
