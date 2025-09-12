@@ -7,13 +7,13 @@ private:
 public:
     bool doesAliceWin(string s) {
         
-        vector<char> vowels;
+        int vowels = 0;
         for(char ch: s){
             if(isVowel(ch))
-                vowels.push_back(ch);
+                vowels++;
         }
 
-        if(vowels.size() == 0)
+        if(vowels == 0)
             return false;
         else
             return true;
