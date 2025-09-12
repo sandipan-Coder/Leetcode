@@ -10,15 +10,11 @@ private:
 public:
     bool doesAliceWin(string s) {
         
-        int vowels = 0;
         for(char ch: s){
             if(isVowel(ch))
-                vowels++;
+                return true;
         }
 
-        if(vowels == 0)
-            return false;
-        else
-            return true;
+        return false;
     }
 };
