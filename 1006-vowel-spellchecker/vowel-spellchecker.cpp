@@ -3,26 +3,28 @@ public:
     vector<string> spellchecker(vector<string>& wordlist, vector<string>& queries) {
         
         //  make lowercase
-        auto toLower = [](const string& s) {
-            string t = s;
-            for (char &c : t) 
-                c = tolower(c);
+        auto toLower = [](const string &str){
+            string tStr = str;
 
-            return t;
+            for(char &ch: tStr)
+                ch = tolower(ch);
+            
+            return tStr;
         };
 
         //  replace vowels with '*'
-        auto maskVowels = [&](const string& s) {
-            string t = s;
-            for (char &c : t) {
-                char lc = tolower(c);
-                if (lc == 'a' || lc == 'e' || lc == 'i' || lc == 'o' || lc == 'u')
-                    c = '*';
+        auto maskVowel = [&](const string &str){
+            string tStr = str;
+
+            for(char &ch: tStr){
+                char lc = tolower(ch);
+                if(lc == 'a' || lc == 'e' || lc == 'i' || lc == 'o' || lc == 'u')
+                    ch = '*';
                 else
-                    c = lc;
+                    ch = lc;
             }
 
-            return t;
+            return tStr;
         };
 
         //  exact words
@@ -30,39 +32,45 @@ public:
 
         //  first lowercase match for each unique lowercase word
         unordered_map<string, string> caseMap;
-        for (auto &w : wordlist) {
-            string lw = toLower(w);
-            if (!caseMap.count(lw)) 
-                caseMap[lw] = w;
+        for(string &word: wordlist){
+            string lowerWord = toLower(word);
+            if(!caseMap.count(lowerWord))
+                caseMap[lowerWord] = word;
         }
+        
 
         //  first vowel-masked match
         unordered_map<string,string> vowelMap;
-        for (auto &w : wordlist) {
-            string mw = maskVowels(w);
-            if (!vowelMap.count(mw)) 
-                vowelMap[mw] = w;
+        for(string &word: wordlist){
+            string wordVowel = maskVowel(word);
+            if(!vowelMap.count(wordVowel))
+                vowelMap[wordVowel] = word;
         }
+        
 
         //  answer queries
         vector<string> ans;
-        for (auto &q : queries) {
-            if (exact.count(q)) {
-                ans.push_back(q);
+        for(string &query: queries){
+            if(exact.count(query)){
+                ans.push_back(query);
                 continue;
             }
-            string lq = toLower(q);
-            if (caseMap.count(lq)) {
-                ans.push_back(caseMap[lq]);
+
+            string lowerCase = toLower(query);
+            if(caseMap.count(lowerCase)){
+                ans.push_back(caseMap[lowerCase]);
                 continue;
             }
-            string mq = maskVowels(q);
-            if (vowelMap.count(mq)) {
-                ans.push_back(vowelMap[mq]);
+
+            string wordVowel = maskVowel(query);
+            if(vowelMap.count(wordVowel)){
+                ans.push_back(vowelMap[wordVowel]);
                 continue;
             }
+
             ans.push_back("");
         }
+        
 
         return ans;
     }
