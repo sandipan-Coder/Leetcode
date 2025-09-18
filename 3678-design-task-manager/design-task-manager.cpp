@@ -1,17 +1,17 @@
-struct cmp {
-    bool operator()(const pair<int, int> &a, const pair<int, int> &b) const{
-        if(a.first != b.first)
-            return a.first > b.first;
-        else
-            return a.second > b.second;
-    }
-};
+// struct cmp {
+//     bool operator()(const pair<int, int> &a, const pair<int, int> &b) const{
+//         if(a.first != b.first)
+//             return a.first > b.first;
+//         else
+//             return a.second > b.second;
+//     }
+// };
 
 class TaskManager {
 
     unordered_map<int, int> taskIdToPriority;
     unordered_map<int, int> taskIdToUser;
-    unordered_map<int, set<pair<int, int>, cmp>> userToPriorTask;
+    // unordered_map<int, set<pair<int, int>, cmp>> userToPriorTask;
     multiset<pair<int, int>, greater<pair<int, int>>> priorToTask;
 
 public:
@@ -31,7 +31,7 @@ public:
             taskIdToUser[taskId] = userId;
 
             // It store in the form of userId -> {priority , taskId}
-            userToPriorTask[userId].insert({prior, taskId});
+            // userToPriorTask[userId].insert({prior, taskId});
 
             // It store {prioritry, taskId} in Multiset
             priorToTask.insert({prior, taskId});
@@ -48,7 +48,7 @@ public:
         taskIdToUser[taskId] = userId;
 
         // It store in the form of userId -> {priority , taskId}
-        userToPriorTask[userId].insert({priority, taskId});
+        // userToPriorTask[userId].insert({priority, taskId});
 
         // It store {prioritry, taskId} in Multiset
         priorToTask.insert({priority, taskId});
@@ -61,13 +61,13 @@ public:
         int userId = taskIdToUser[taskId];
 
         // Erase the previous priority
-        userToPriorTask[userId].erase({oldPriority, taskId});
+        // userToPriorTask[userId].erase({oldPriority, taskId});
         // Erase from multiset
         priorToTask.erase({oldPriority, taskId});
 
         // Update all places
         taskIdToPriority[taskId] = newPriority;
-        userToPriorTask[userId].insert({newPriority, taskId});
+        // userToPriorTask[userId].insert({newPriority, taskId});
         priorToTask.insert({newPriority, taskId});
     }
     
@@ -77,7 +77,7 @@ public:
         int userId = taskIdToUser[taskId];
 
         // Erase from all places
-        userToPriorTask[userId].erase({priority, taskId});
+        // userToPriorTask[userId].erase({priority, taskId});
         priorToTask.erase({priority, taskId});
         taskIdToPriority.erase(taskId);
         taskIdToUser.erase(taskId);
@@ -94,7 +94,7 @@ public:
         
 
         // Erase from all places
-        userToPriorTask[userId].erase({priority, taskId});
+        // userToPriorTask[userId].erase({priority, taskId});
         priorToTask.erase({priority, taskId});
         taskIdToPriority.erase(taskId);
         taskIdToUser.erase(taskId);
