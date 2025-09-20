@@ -1,52 +1,66 @@
 class Router {
+    unordered_map<int, set<pair<int, int>>> sourceToDestAndTime; // This store like :- source -> {destination, timestamp}
+    queue<vector<int>> packets; // This will store {source, destination, timestamp}.
+    unordered_map<int, vector<int>> destiToTime; // This will store like:- {destination -> vector{times}}.
+    int maxSize = 0;
 public:
-
-    map<vector<int>, int> mpp; // to track duplicates
-    queue<vector<int>> queue; // to store packets in FIFO order
-    unordered_map<int, vector<int>> timestamps; // for timestamps tracking
-    unordered_map<int, int> st; 
-    int maxSize = 0; // maxSize allowed
-
     Router(int memoryLimit) {
         maxSize = memoryLimit;
     }
     
     bool addPacket(int source, int destination, int timestamp) {
-        vector<int> packet = {source, destination, timestamp};
-        // checking for duplicate
-        if (mpp.count(packet))
+        
+        if(sourceToDestAndTime[source].count({destination, timestamp}))
             return false;
-        if (queue.size() == maxSize) { // remove the first element if queue is full
-            vector<int> res = queue.front();
-            mpp.erase(res);
-            int temp = res[1];
-            st[temp]++;  
-            queue.pop();
+        
+        if(packets.size() == maxSize){
+            vector<int> packet = packets.front();
+            packets.pop();
+
+            int sour = packet[0];
+            int desti = packet[1];
+            int time = packet[2];
+            sourceToDestAndTime[sour].erase({desti, time});
+            auto &vec = destiToTime[desti];
+            auto it = lower_bound(vec.begin(), vec.end(), time);
+            vec.erase(it);
         }
-        queue.push(packet);
-        mpp[packet]++;
-        timestamps[destination].push_back(timestamp);
+
+        packets.push({source, destination, timestamp});
+        sourceToDestAndTime[source].insert({destination, timestamp});
+        destiToTime[destination].push_back(timestamp);
         return true;
     }
     
     vector<int> forwardPacket() {
-        if(queue.empty()) return {};
-        vector<int> res = queue.front();
-        queue.pop();
-        mpp.erase(res);
-        int temp = res[1];
-        st[temp]++;
-        return res;
+        
+        if(packets.size() == 0)
+            return {};
+
+        vector<int> packet = packets.front();
+        packets.pop();
+
+        int sour = packet[0];
+        int desti = packet[1];
+        int time = packet[2];
+        sourceToDestAndTime[sour].erase({desti, time});
+        auto &vec = destiToTime[desti];
+        auto it = lower_bound(vec.begin(), vec.end(), time);
+        vec.erase(it);
+
+        return packet;
     }
     
     int getCount(int destination, int startTime, int endTime) {
-        if(timestamps.find(destination) == timestamps.end())
+        
+        if(!destiToTime.count(destination))
             return 0;
-        auto &p = timestamps[destination];
-        int temp = st[destination];
-        auto right = lower_bound(p.begin() + temp, p.end(), startTime);
-        auto left = upper_bound(p.begin() + temp, p.end(), endTime);
-        return int(left - right);
+
+        auto &vec = destiToTime[destination];
+        auto it1 = lower_bound(vec.begin(), vec.end(), startTime);
+        auto it2 = upper_bound(vec.begin(), vec.end(), endTime);
+
+        return (it2 - it1);
     }
 };
 
