@@ -2,23 +2,23 @@ class Solution {
 public:
     vector<int> maxSlidingWindow(vector<int>& nums, int k) {
         
-        multiset<int, greater<>> ms;
+        deque<int> dq;  // store indices
         vector<int> ans;
-        int n = nums.size();
 
-        for(int i = 0; i < k; i++)
-            ms.insert(nums[i]);
+        for (int i = 0; i < nums.size(); i++) {
+            // remove indices outside window
+            if (!dq.empty() && dq.front() <= i - k)
+                dq.pop_front();
 
-        int maxi = *ms.begin();
-        ans.push_back(maxi);
+            // maintain decreasing order
+            while (!dq.empty() && nums[dq.back()] <= nums[i])
+                dq.pop_back();
 
-        for(int i = k; i < n; i++){
-            
-            ms.insert(nums[i]);
-            int out = nums[i - k];
-            ms.erase(ms.find(out));
-            int maxi = *ms.begin();
-            ans.push_back(maxi);
+            dq.push_back(i);
+
+            // record max after first k-1 steps
+            if (i >= k - 1)
+                ans.push_back(nums[dq.front()]);
         }
 
         return ans;
