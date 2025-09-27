@@ -3,7 +3,7 @@ public:
     int minKBitFlips(vector<int>& nums, int k) {
         
         int n = nums.size();
-        vector<int> isFlipped(n, 0);
+        vector<bool> isFlipped(n, false);
         int flipCount = 0, currFlip = 0;
 
         for (int i = 0; i < n; i++) {
@@ -15,7 +15,7 @@ public:
                     return -1;    // can't flip beyond bounds
                 flipCount++;
                 currFlip ^= 1;
-                isFlipped[i] = 1;
+                isFlipped[i] = true;
             }
         }
         
