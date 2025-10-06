@@ -3,45 +3,34 @@ public:
     int swimInWater(vector<vector<int>>& grid) {
         
         int m = grid.size(), n = grid[0].size();
-        vector<pair<int,int>> directions = {{0,1}, {1,0}, {0,-1}, {-1,0}};
+        vector<tuple<int,int,int>> edges;
         
-        auto dfs = [&](int r, int c, int mid, vector<vector<bool>>& seen, auto& dfs_ref) -> bool {
-            if (r == m-1 && c == n-1) 
-                return true;
-                
-            seen[r][c] = true;
-            
-            for (auto [dr, dc] : directions) {
-                int nr = r + dr, nc = c + dc;
-                if (nr >= 0 && nr < m && nc >= 0 && nc < n && !seen[nr][nc]) {
-                    if (grid[nr][nc] <= mid) {
-                        if (dfs_ref(nr, nc, mid, seen, dfs_ref)) 
-                            return true;
-                    }
-                }
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
+                if (i > 0)
+                    edges.push_back({max(grid[i][j], grid[i-1][j]), i*n+j, (i-1)*n+j});
+                if (j > 0)
+                    edges.push_back({max(grid[i][j], grid[i][j-1]), i*n+j, i*n+j-1});
             }
-            return false;
-        };
-        
-        auto possible = [&](int mid) {
-            if (grid[0][0] > mid) return false;
-            vector<vector<bool>> seen(m, vector<bool>(n, false));
-            return dfs(0, 0, mid, seen, dfs);
-        };
-        
-        int lo = grid[0][0], hi = 0;
-        for (auto& row : grid)
-            for (int val : row)
-                hi = max(hi, val);
-        
-        while (lo < hi) {
-            int mid = lo + (hi - lo) / 2;
-            if (possible(mid))
-                hi = mid;
-            else 
-                lo = mid + 1;
         }
+        
+        sort(edges.begin(), edges.end());
+        vector<int> parent(m * n);
+        iota(parent.begin(), parent.end(), 0);
+        
+        function<int(int)> find = [&](int x) {
+            return parent[x] == x ? x : parent[x] = find(parent[x]);
+        };
+        
+        auto unite = [&](int x, int y) {
+            parent[find(x)] = find(y);
+        };
 
-        return lo;
+        for (auto [cost, u, v] : edges) {
+            unite(u, v);
+            if (find(0) == find(m*n-1))
+                return cost;
+        }
+        return grid[0][0];
     }
 };
