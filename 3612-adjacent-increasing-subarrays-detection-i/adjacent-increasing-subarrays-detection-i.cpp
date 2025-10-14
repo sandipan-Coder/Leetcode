@@ -15,8 +15,8 @@ public:
                 incr = 1;
             }
 
-            maxLen = max(maxLen, max(incr / 2, min(prevI, incr)));
-            if(maxLen >= k)
+            // maxLen = max(maxLen, );
+            if(max(incr >> 1, min(prevI, incr)) >= k)
                 return true;
         }
 
