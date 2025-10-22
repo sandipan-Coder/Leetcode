@@ -2,27 +2,33 @@ class Solution {
 public:
     int maxFrequency(vector<int>& nums, int k, int numOperations) {
         
-        unordered_map<int, int> mp;
-        vector<pair<int, int>> line;
-
-        for(int i = 0; i < nums.size(); i++){
-           mp[nums[i]]++;
-           line.push_back({nums[i] - k, 1});
-           line.push_back({nums[i], 2});
-           line.push_back({nums[i] + k, 3});
-        }
-        sort(line.begin(), line.end());
+        int n = nums.size();
+        int maxVal = *max_element(nums.begin(), nums.end()) + k;
         int ans = 0;
-        int cnt = 0;
 
-        for(auto &[num,type]: line){
-            if(type == 1) 
-                cnt++;
-            else if(type == 3) 
-                cnt--;
-            int requiredOperation = cnt - mp[num];
+        vector<int> diff(maxVal + 2, 0);
+        unordered_map<int, int> freq;
 
-            ans = max(ans, mp[num] + min(requiredOperation, numOperations));
+        for(int ele: nums){
+
+            freq[ele]++;
+
+            int l = max(ele - k, 0);
+            int r = ele + k;
+
+            diff[l]++;
+            diff[r + 1]--;
+        }
+
+        for(int i = 1; i <= maxVal; i++){
+
+            diff[i] += diff[i - 1];
+
+            int noOfFreq = freq[i];
+            int needConversion = diff[i] - noOfFreq;
+            int maxPossibleConverion = min(needConversion, numOperations);
+
+            ans = max(ans, noOfFreq + maxPossibleConverion);
         }
 
         return ans;
