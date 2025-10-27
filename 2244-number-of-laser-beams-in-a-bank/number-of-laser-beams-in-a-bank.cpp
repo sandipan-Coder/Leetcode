@@ -13,10 +13,11 @@ public:
                     countOfOne++;
             }
 
-            ans += (prevCount * countOfOne);
+            if(countOfOne){
 
-            if(countOfOne)
+                ans += (prevCount * countOfOne);
                 prevCount = countOfOne;
+            }  
         }
         
         return ans;
