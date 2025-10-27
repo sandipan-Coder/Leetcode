@@ -2,8 +2,9 @@ class Solution {
 public:
     int numberOfBeams(vector<string>& bank) {
         
-        vector<int> securityDevices;
+        // vector<int> securityDevices;
         int ans = 0;
+        int prevCount = 0;
         
         for(string &str: bank){
 
@@ -13,15 +14,17 @@ public:
                     countOfOne++;
             }
 
+            ans += (prevCount * countOfOne);
+
             if(countOfOne)
-                securityDevices.push_back(countOfOne);
+                prevCount = countOfOne;
         }
 
-        if(securityDevices.size() == 0 || securityDevices.size() == 1)
-            return 0;
+        // if(securityDevices.size() == 0 || securityDevices.size() == 1)
+        //     return 0;
         
-        for(int i = 1; i < securityDevices.size(); i++)
-            ans += (securityDevices[i] * securityDevices[i - 1]);
+        // for(int i = 1; i < securityDevices.size(); i++)
+        //     ans += (securityDevices[i] * securityDevices[i - 1]);
         
         return ans;
     }
