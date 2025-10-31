@@ -15,7 +15,7 @@ public:
             vis[ele] = 1;
         }
 
-        sort(ans.begin(), ans.end());
+        // sort(ans.begin(), ans.end());
         return ans;
     }
 };
