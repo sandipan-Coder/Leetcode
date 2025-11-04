@@ -6,21 +6,23 @@ public:
         unordered_map<int, int> mp;
         priority_queue<pair<int, int>, vector<pair<int, int>>, greater<>> pq;
         vector<int> ans;
-
         int idx = 0;
 
+        // Store first K elements frequency in the map
         while(idx < k){
             int ele = nums[idx];
             mp[ele]++;
             idx++;
         }
 
+        // Store first K elements frequency and element itself in the priority_queue
         for(auto it: mp){
             pq.push({it.second, it.first});
             if(pq.size() > x)
                 pq.pop();
         }
 
+        // Calculate the first k elements X-Sum
         int sum = 0;
         while(!pq.empty()){
 
@@ -32,6 +34,7 @@ public:
         }
         ans.push_back(sum);
 
+        // Using Sliding window technique solve later part of the array
         while(idx < n){
             int ele = nums[idx];
             mp[ele]++;
