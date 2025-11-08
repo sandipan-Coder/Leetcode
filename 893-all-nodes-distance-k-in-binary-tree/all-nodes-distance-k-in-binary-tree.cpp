@@ -44,12 +44,11 @@ public:
 
         q.push(target);
         visited[target] = true;
-        int dist = -1;
+        int dist = 0;
 
         while(!q.empty()){
 
             int size = q.size();
-            dist++;
             if(dist == k)
                 break;
 
@@ -72,6 +71,7 @@ public:
                     visited[parentOfNodes[node]] = true;
                 }
             }
+            dist++;
         }
 
         while(!q.empty()){
