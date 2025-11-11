@@ -20,7 +20,7 @@ private:
         return {zeros, ones};
     }
 
-    int solve(int idx, vector<string>& strs, int m, int n){
+    int solve(int idx, vector<vector<int>> &vec, int m, int n){
 
         if(idx >= len)
             return 0;
@@ -30,12 +30,13 @@ private:
         if(dp[idx][m][n] != -1)
             return dp[idx][m][n];
         
-        vector<int> count = countZeroAndOnes(strs[idx]);
+        int zeros = vec[idx][0];
+        int ones = vec[idx][1];
         int take = 0;
         
-        int notTake = solve(idx + 1, strs, m, n);
-        if(m >= count[0] && n >= count[1])
-            take = 1 + solve(idx + 1, strs, m-count[0], n-count[1]);
+        int notTake = solve(idx + 1, vec, m, n);
+        if(m >= zeros && n >= ones)
+            take = 1 + solve(idx + 1, vec, m-zeros, n-ones);
 
         return dp[idx][m][n] = max(take, notTake);
     }
@@ -45,7 +46,22 @@ public:
         
         len = strs.size();
         memset(dp, -1, sizeof(dp));
+        vector<vector<int>> vec(len);
 
-        return solve(0, strs, m, n);
+        for(int i = 0; i < len; i++){
+            int zeros = 0;
+            int ones = 0;
+            for(char ch: strs[i]){
+
+                if(ch == '0')
+                    zeros++;
+                else
+                    ones++;
+            }
+            vec[i].push_back(zeros);
+            vec[i].push_back(ones);
+        }
+
+        return solve(0, vec, m, n);
     }
 };
