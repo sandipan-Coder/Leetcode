@@ -5,6 +5,7 @@ class Solution {
     int dp[601][101][101];
 private:
 
+    /*
     vector<int> countZeroAndOnes(string &str){
 
         int zeros = 0;
@@ -19,6 +20,7 @@ private:
 
         return {zeros, ones};
     }
+    */
 
     int solve(int idx, vector<vector<int>> &vec, int m, int n){
 
@@ -30,6 +32,8 @@ private:
         if(dp[idx][m][n] != -1)
             return dp[idx][m][n];
         
+        // vector<int> count = countZeroAndOnes(strs[idx]);
+
         int zeros = vec[idx][0];
         int ones = vec[idx][1];
         int take = 0;
