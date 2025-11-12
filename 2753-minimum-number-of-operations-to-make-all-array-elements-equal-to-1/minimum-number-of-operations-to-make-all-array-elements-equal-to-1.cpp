@@ -25,8 +25,10 @@ public:
             for(int j = i+1; j < n; j++){
 
                 ans = gcd(ans, nums[j]);
-                if(ans == 1)
+                if(ans == 1){
                     minLen = min(minLen, (j - i + 1));
+                    break;
+                }
             }
         }
 
