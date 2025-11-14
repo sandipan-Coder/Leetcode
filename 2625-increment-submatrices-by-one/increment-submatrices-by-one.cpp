@@ -2,21 +2,27 @@ class Solution {
 public:
     vector<vector<int>> rangeAddQueries(int n, vector<vector<int>>& queries) {
         
-        vector<vector<int>> mat(n, vector<int>(n, 0));
+        vector<vector<int>>  arr(n+1, vector<int>(n, 0));
 
-        for(auto it : queries){
-            
-            int row1 = it[0];
-            int col1 = it[1];
-            int row2 = it[2];
-            int col2 = it[3];
-
-            for(int i = row1; i <= row2; i++){
-                for(int j = col1; j <= col2; j++)
-                    mat[i][j] += 1;
+        for(auto& q: queries){
+            const int r1=q[0], c1=q[1], r2=q[2], c2=q[3];
+            arr[r1][c1]++;
+            arr[r2+1][c1]--;
+            if (c2+1<n){
+                arr[r1][c2+1]--;
+                arr[r2+1][c2+1]++;
             }
         }
-
-        return mat;
+        for(int i=0; i<n; i++){
+            for(int j=1; j<n; j++)
+                arr[i][j]+=arr[i][j-1];
+        }
+        for(int j=0; j<n; j++){
+            for(int i=1; i<n; i++)
+                arr[i][j]+=arr[i-1][j];
+        }
+        
+        arr.resize(n);
+        return arr;
     }
 };
