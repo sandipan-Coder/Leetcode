@@ -43,6 +43,32 @@ private:
         return dp[i][j] = mini;
     }
 
+    // Bottom up
+    int solveBottom(int n, vector<int>& cuts){
+
+        for(int i = n; i >= 1; i--) {
+            for(int j = 1; j <= n; j++){
+                
+                if(i > j)
+                    continue;
+
+                int mini = INT_MAX;
+                for(int idx = i; idx <= j; idx++){
+
+                    int cost = cuts[j + 1] - cuts[i - 1] + dp[i][idx - 1] +
+                                dp[idx + 1][j];
+                            
+                    mini = min(mini, cost);
+                }
+                dp[i][j] = mini;
+            }
+        }
+
+        
+
+        return dp[1][n];
+    }
+
 public:
     int minCost(int n, vector<int>& cuts) {
 
@@ -55,8 +81,13 @@ public:
         // return solve(1, len, cuts);
 
         // Recursive + Memoization
+        /*
         memset(dp, -1, sizeof(dp));
         return solveMem(1, len, cuts);
+        */
 
+        // Bottom up
+        memset(dp, 0, sizeof(dp));
+        return solveBottom(len, cuts);
     }
 };
