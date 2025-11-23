@@ -2,39 +2,44 @@ class Solution {
 public:
     int maxSumDivThree(vector<int>& nums) {
         
-        int n = nums.size();
-        const int INF = 1 << 30;  // Large negative value to represent impossible states
-      
-        // dp[i][j] represents the maximum sum using first i elements 
-        // where the sum modulo 3 equals j
-        int dp[n + 1][3];
-      
-        // Base case: with 0 elements, only sum 0 is possible
-        dp[0][0] = 0;
-        dp[0][1] = -INF;  // Impossible to get remainder 1 with no elements
-        dp[0][2] = -INF;  // Impossible to get remainder 2 with no elements
-      
-        // Process each element
-        for (int i = 1; i <= n; ++i) {
-            int currentNum = nums[i - 1];
-          
-            // For each possible remainder when divided by 3
-            for (int remainder = 0; remainder < 3; ++remainder) {
-                // Option 1: Don't include current number
-                int excludeCurrent = dp[i - 1][remainder];
-              
-                // Option 2: Include current number
-                // We need previous sum with remainder that, when added to currentNum,
-                // gives us the target remainder
-                int prevRemainder = (remainder - currentNum % 3 + 3) % 3;
-                int includeCurrent = dp[i - 1][prevRemainder] + currentNum;
-              
-                // Take maximum of both options
-                dp[i][remainder] = max(excludeCurrent, includeCurrent);
-            }
+        int sum = 0;
+        vector<int> reminder1;
+        vector<int> reminder2;
+
+        for(int num: nums){
+
+            sum += num;
+            
+            if(num % 3 == 1)
+                reminder1.push_back(num);
+            else if(num % 3 == 2)
+                reminder2.push_back(num);
         }
-      
-        // Return maximum sum divisible by 3 (remainder = 0)
-        return dp[n][0];
+
+        if(sum % 3 == 0)
+            return sum;
+        
+        sort(begin(reminder1), end(reminder1));
+        sort(begin(reminder2), end(reminder2));
+
+        int result = 0;
+        int reminder = sum % 3;
+
+        if(reminder == 1){
+
+            int remove1 = (reminder1.size() >= 1) ? reminder1[0] : INT_MAX;
+            int remove2 = (reminder2.size() >= 2) ? reminder2[0] + reminder2[1] : INT_MAX;
+
+            result = sum - min(remove1, remove2);
+        }
+        else {
+
+            int remove1 = (reminder2.size() >= 1) ? reminder2[0] : INT_MAX;
+            int remove2 = (reminder1.size() >= 2) ? reminder1[0] + reminder1[1] : INT_MAX;
+
+            result = sum - min(remove1, remove2);
+        }
+
+        return result;
     }
 };
