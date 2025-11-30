@@ -2,17 +2,18 @@ class Solution {
 public:
     int minSubarray(vector<int>& nums, int p) {
         
-        long total = 0;
+        int total = 0;
         for (int x : nums) 
-            total += x;
+            total = (total + x) % p;
 
-        long target = total % p;
-        if (target == 0) return 0;
+        int target = total % p;
+        if (target == 0) 
+            return 0;
 
         unordered_map<int, int> mp;
         mp[0] = -1;
 
-        long prefix = 0;
+        int prefix = 0;
         int res = nums.size();
 
         for (int i = 0; i < nums.size(); i++) {
@@ -23,7 +24,7 @@ public:
             if (mp.count(need))
                 res = min(res, i - mp[need]);
 
-            mp[(int)prefix] = i;
+            mp[prefix] = i;
         }
 
         return (res == nums.size()) ? -1 : res;
