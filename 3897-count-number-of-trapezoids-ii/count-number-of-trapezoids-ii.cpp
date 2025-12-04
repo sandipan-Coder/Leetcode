@@ -6,7 +6,7 @@ public:
         int inf = 1e9 + 7;
         int ans = 0;
 
-        unordered_map<float, vector<float>> slopeToIntercept;
+        unordered_map<float, vector<float>> slopeToIntercept; // Slop -> {Intercept}
         unordered_map<int, vector<float>> midToSlope; 
 
         for (int i = 0; i < n; i++) {
@@ -16,36 +16,40 @@ public:
 
                 int x2 = points[j][0];
                 int y2 = points[j][1];
-                int dx = x1 - x2;
-                int dy = y1 - y2;
-                float k, b;
+                int dx = x2 - x1;
+                int dy = y2 - y1;
+                float slop, intercept;
 
                 if (x2 == x1) {
-                    k = inf;
-                    b = x1;
+                    slop = inf;
+                    intercept = x1;
                 } else {
-                    k = (float)(y2 - y1) / (x2 - x1);
-                    b = (float)(y1 * dx - x1 * dy) / dx;
+                    slop = (float)dy / dx;
+                    intercept = (float)(y1 * dx - x1 * dy) / dx;
                 }
 
                 int mid = (x1 + x2) * 10000 + (y1 + y2);
-                slopeToIntercept[k].push_back(b);
-                midToSlope[mid].push_back(k);
+                slopeToIntercept[slop].push_back(intercept);
+                midToSlope[mid].push_back(slop);
             }
         }
 
-        for (auto& [_, sti] : slopeToIntercept) {
-            if (sti.size() == 1) 
+        // This is same as problem -> I
+        for (auto &it : slopeToIntercept) {
+            if (it.second.size() == 1) 
                 continue;
             
-            map<float, int> cnt;
-            for (float b : sti) 
-                cnt[b]++;
+            // Destructure same intercept points with their frequencies
+            map<float, int> mp;
+            for (float b : it.second) 
+                mp[b]++;
             
-            int sum = 0;
-            for (auto& [_, count] : cnt) {
-                ans += sum * count;
-                sum += count;
+            int prevCount = 0;
+            for (auto &it : mp) {
+
+                int count = it.second;
+                ans += (prevCount * count);
+                prevCount += count;
             }
         }
 
