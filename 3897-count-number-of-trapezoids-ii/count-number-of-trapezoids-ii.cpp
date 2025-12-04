@@ -7,7 +7,7 @@ public:
         int ans = 0;
 
         unordered_map<float, vector<float>> slopeToIntercept; // Slop -> {Intercept}
-        unordered_map<int, vector<float>> midToSlope; 
+        unordered_map<int, vector<float>> midToSlope;        // Midpoints -> {Slops}
 
         for (int i = 0; i < n; i++) {
             int x1 = points[i][0];
@@ -41,8 +41,8 @@ public:
             
             // Destructure same intercept points with their frequencies
             map<float, int> mp;
-            for (float b : it.second) 
-                mp[b]++;
+            for (float intercepts : it.second) 
+                mp[intercepts]++;
             
             int prevCount = 0;
             for (auto &it : mp) {
@@ -58,13 +58,13 @@ public:
                 continue;
             
             map<float, int> cnt;
-            for (float k : mts) 
-                cnt[k]++;
+            for (float slop : mts) 
+                cnt[slop]++;
             
-            int sum = 0;
+            int prevCount = 0;
             for (auto& [_, count] : cnt) {
-                ans -= sum * count;
-                sum += count;
+                ans -= prevCount * count;
+                prevCount += count;
             }
         }
         
