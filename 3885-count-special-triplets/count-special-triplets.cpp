@@ -13,7 +13,7 @@ public:
         
         left[nums[0]]++;
 
-        for(int i = 1; i < n; i++){
+        for(int i = 1; i < n-1; i++){
 
             right[nums[i]]--;
             if(right[nums[i]] == 0)
