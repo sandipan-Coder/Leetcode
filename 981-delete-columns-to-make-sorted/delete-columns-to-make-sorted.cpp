@@ -1,31 +1,19 @@
 class Solution {
 public:
     int minDeletionSize(vector<string>& strs) {
-        
-        int n = strs.size();
 
-        if(n == 1)
-            return 0;
+        const int n = strs.size(), m = strs[0].size();
+        int cnt = 0;
 
-        int ans = 0;
-        int noOfCol = strs[0].size();
-        vector<int> col(noOfCol, 0);
-
-        for(int i = 1; i < n; i++){
-            string str1 = strs[i - 1];
-            string str2 = strs[i];
-
-            for(int i = 0; i < noOfCol; i++){
-                if(str1[i] > str2[i])   
-                    col[i] = 1;
+        for(int j = 0; j < m; j++){
+            for (int i = 0; i < n-1; i++){
+                if(strs[i][j] > strs[i+1][j]){
+                    cnt++;
+                    break;
+                }
             }
         }
         
-        for(int i = 0; i < noOfCol; i++){
-            if(col[i])
-                ans++;
-        }
-
-        return ans;
+        return cnt;
     }
 };
