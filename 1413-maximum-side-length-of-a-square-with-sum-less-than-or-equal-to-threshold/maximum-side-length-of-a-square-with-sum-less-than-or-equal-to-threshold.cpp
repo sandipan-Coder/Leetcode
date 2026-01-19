@@ -1,10 +1,11 @@
 class Solution {
     int rows;
     int cols;
+    vector<vector<int>> prefix;
 private:
 
     //function for squreSum
-    int squredSum(int i, int j, int r2, int c2, vector<vector<int>> &prefix) {
+    int squredSum(int i, int j, int r2, int c2) {
 
         int sum = prefix[r2][c2];
 
@@ -20,7 +21,7 @@ private:
         return sum;
     }
 
-    bool isPossible(int side, vector<vector<int>> &prefix, int &threshold) {
+    bool isPossible(int side, int &threshold) {
 
         for(int i = 0; i + side - 1 < rows; i++) {
             for(int j = 0; j + side - 1 < cols; j++) {
@@ -28,7 +29,7 @@ private:
                 int r2 = i + side - 1;
                 int c2 = j + side - 1;
 
-                if(squredSum(i, j, r2, c2, prefix) <= threshold) 
+                if(squredSum(i, j, r2, c2) <= threshold) 
                     return true;
             }
         }
@@ -43,7 +44,7 @@ public:
         cols = mat[0].size();
         int best = 0; // Store best squre side which sum is equal to threshold
 
-        vector<vector<int>> prefix(rows, vector<int>(cols, 0));
+        prefix.resize(rows, vector<int>(cols, 0));
 
         // prefix[i][j] = sum of matrix from top_left (0, 0) -> (i, j);
         for(int i = 0; i < rows; i++) {
@@ -72,7 +73,7 @@ public:
                     int r2 = i + k;
                     int c2 = j + k;
 
-                    int sum = squredSum(i, j, r2, c2, prefix);
+                    int sum = squredSum(i, j, r2, c2);
 
                     if(sum <= threshold)
                         best = max(best, k+1);
@@ -93,7 +94,7 @@ public:
 
             int mid = low + (high - low) / 2;
 
-            if(isPossible(mid, prefix, threshold)) {
+            if(isPossible(mid, threshold)) {
                 best = mid;
                 low = mid + 1;
             }
