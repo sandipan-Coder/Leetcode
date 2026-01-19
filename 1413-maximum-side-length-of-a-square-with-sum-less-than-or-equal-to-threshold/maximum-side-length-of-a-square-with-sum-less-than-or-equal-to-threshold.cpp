@@ -48,6 +48,8 @@ public:
 
                     if(sum <= threshold)
                         best = max(best, k+1);
+                    else
+                        break;
                 }
             }
         }
