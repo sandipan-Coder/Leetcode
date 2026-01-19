@@ -36,7 +36,13 @@ public:
             return sum;
         };
 
+        // ********* Approach-1 (Using 2D Prefix Sum and finding best side square)
+        //T.C : O(rows * cols * min(rows, cols))
+        //S.C : O(rows * cols)
+
+
         // Check all sub-matrix
+        /*
         for(int i = 0; i < rows; i++) {
             for(int j = 0; j < cols; j++) {
 
@@ -52,6 +58,43 @@ public:
                         break;
                 }
             }
+        }
+        */
+
+        // ************ Approach-2 (Using 2D Prefix Sum and binarysearch the square side)
+        //T.C : O(rows * cols * log(min(rows, cols)))
+        //S.C : O(rows * cols)
+
+        auto isPossible = [&](int side) {
+
+            for(int i = 0; i + side - 1 < rows; i++) {
+                for(int j = 0; j + side - 1 < cols; j++) {
+                    
+                    int r2 = i + side - 1;
+                    int c2 = j + side - 1;
+
+                    if(squredSum(i, j, r2, c2) <= threshold) 
+                        return true;
+                }
+            }
+
+            return false;
+        };
+
+
+        int low = 1;
+        int high = min(rows, cols);
+
+        while(low <= high) {
+
+            int mid = low + (high - low) / 2;
+
+            if(isPossible(mid)) {
+                best = mid;
+                low = mid + 1;
+            }
+            else
+                high = mid - 1;
         }
 
         return best;
