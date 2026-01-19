@@ -40,7 +40,7 @@ public:
         for(int i = 0; i < rows; i++) {
             for(int j = 0; j < cols; j++) {
 
-                for(int k = 0; k < min(rows-i, cols-j); k++) {
+                for(int k = best; k < min(rows-i, cols-j); k++) {
                     int r2 = i + k;
                     int c2 = j + k;
 
