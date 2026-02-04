@@ -1,8 +1,8 @@
 class Solution {
     typedef long long ll;
-    int n;
-    vector<vector<ll>> dp;
-
+    // int n;
+    // vector<vector<ll>> dp;
+/*
 private:
 
     ll solve(int idx, int trand, vector<int>& nums) {
@@ -53,13 +53,64 @@ private:
         
         return dp[idx][trand] = max(take, skip);
     }
+*/
 
 public:
     ll maxSumTrionic(vector<int>& nums) {
         
-        n = nums.size();
-        dp.resize(n+1, vector<ll>(4, LLONG_MIN));
+        ll n = size(nums);
+        ll i = 0;
+        vector<vector<ll>> v;
 
-        return solve(0, 0, nums);  // solve(index, trand, array)
+        while(i < n){ // note-down the dec-trend indices
+            int org = i;
+            ll dec_sum = 0;
+
+            while(i+1 < n && nums[i] > nums[i+1]){
+                dec_sum += nums[i] * 1ll;
+                i++;
+            }
+
+            if(i != org){
+                
+                dec_sum += nums[i];
+                v.push_back({org, i, dec_sum});
+            }
+
+            i++;
+        }
+
+
+        ll ans = -1e18;
+
+        for(vector<ll> t : v) {
+
+            ll left = t[0]; 
+            ll right = t[1];
+
+            if ( left == 0 || right == n-1)  
+                continue ;
+            
+            ll left_sum = -1e18;
+            ll right_sum = -1e18;
+            ll cur = 0;
+            while(left - 1 >= 0 && nums[left - 1] < nums[left]){ // left-inc max
+                cur += nums[left - 1] * 1ll;
+                left_sum = max(left_sum, cur);
+                left--;
+            }
+
+            cur = 0;
+            while(right + 1 < n && nums[right] < nums[right+1]){ // right-inc max
+                cur += nums[right + 1] * 1ll;
+                right_sum = max(right_sum, cur);
+                right++;
+            }
+
+            ll total_sum = left_sum + t[2] + right_sum; // t[2] : cur dec section sum
+            ans = max(ans, total_sum);
+        }
+
+        return ans;
     }
 };
