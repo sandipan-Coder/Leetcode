@@ -11,10 +11,7 @@ public:
         for(int i = 0; i < n; i++) {
 
             int idx = (i + nums[i]) % n;
-            if(idx < 0)
-                ans[i] = nums[n + idx];
-            else
-                ans[i] = nums[idx];
+            ans[i] = (idx < 0) ? nums[n + idx] : nums[idx];
         }
 
         return ans;
