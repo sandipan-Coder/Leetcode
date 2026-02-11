@@ -9,28 +9,18 @@ public:
         if(n == 1)
             return false;
         unordered_map<int, int> mp;
+        for(int i = 0; i < n; i++){
 
-        for(int i = 0; i <= min(k, n-1); i++) {
+            int num = nums[i];
+            if(mp.count(num)) {
 
-            if(mp.count(nums[i]))
-                return true;
-            
-            mp[nums[i]]++;
+                if((i - mp[num]) <= k)
+                    return true;
+            }
+
+            mp[num] = i;
         }
-
-        for(int i = k+1; i < n; i++) {
-
-            int deleteElement = nums[i - k - 1];
-            mp[deleteElement]--;
-            if(mp[deleteElement] == 0)
-                mp.erase(deleteElement);
-            
-            if(mp.count(nums[i]))
-                return true;
-            
-            mp[nums[i]]++;
-        }
-
+        
         return false;
     }
 };
