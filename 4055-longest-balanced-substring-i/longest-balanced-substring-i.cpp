@@ -7,9 +7,12 @@ private:
 
         for(int i = 0; i < 26; i++) {
 
-            if((count == 0) && (freq[i] > 0))
+            if(freq[i] == 0)
+                continue;
+            
+            if(count == 0)
                 count = freq[i];
-            else if((count != 0) && (freq[i] > 0) && (count != freq[i]))
+            else if(count != freq[i])
                 return false;
         }
 
