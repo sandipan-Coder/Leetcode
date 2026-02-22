@@ -1,28 +1,73 @@
 class Solution {
-public:
-    bool isValidSudoku(vector<vector<char>>& board) {
+private:
+
+    bool validTraversal(int sRow, int eRow, int sCol, int eCol, vector<vector<char>>& board) {
+
+        set <int> st;
         
-        for (int i = 0; i < 9; i++) {
-            int rowMap[10] = {0}, colMap[10] = {0};
-            for (int j = 0; j < 9; j++) {
-                if (board[i][j] != '.' && rowMap[board[i][j]-'0']++) 
+        for(int i = sRow; i <= eRow; i++) {
+            for(int j = sCol; j <= eCol; j++) {
+            
+                if(board[i][j] == '.')
+                    continue;
+                
+                int num = board[i][j] - '0';
+                if(st.count(num))
                     return false;
-                if (board[j][i] != '.' && colMap[board[j][i]-'0']++) 
-                    return false;
+                
+                st.insert(num);
             }
         }
 
-        // check each 3x3 box
-        for (int boxRow = 0; boxRow < 9; boxRow += 3) {
-            for (int boxCol = 0; boxCol < 9; boxCol += 3) {
-                int boxMap[10] = {0};
-                for (int i = 0; i < 3; i++) {
-                    for (int j = 0; j < 3; j++) {
-                        char c = board[boxRow+i][boxCol+j];
-                        if (c != '.' && boxMap[c-'0']++) 
-                            return false;
-                    }
-                }
+        return true;
+    }
+
+public:
+    bool isValidSudoku(vector<vector<char>>& board) {
+        
+        // Validate rows
+        for(int i = 0; i < 9; i++) {
+            set <int> st;
+            for(int j = 0; j < 9; j++) {
+
+                if(board[i][j] == '.')
+                    continue;
+
+                int num = board[i][j] - '0';
+                if(st.count(num))
+                    return false;
+                
+                st.insert(num);
+            }
+        }
+
+
+        // Validate columns
+        for(int j = 0; j < 9; j++) {
+            set <int> st;
+            for(int i = 0; i < 9; i++) {
+
+                if(board[i][j] == '.')
+                    continue;
+
+                int num = board[i][j] - '0';
+                if(st.count(num))
+                    return false;
+                
+                st.insert(num);
+            }
+        }
+
+        // Validate 3 X 3 sub-grids
+        for(int i = 0; i < 9; i += 3) {
+            int er = i + 2;
+            for(int j = 0; j < 9; j += 3) {
+
+                int ec = j + 2;
+
+                bool res = validTraversal(i, er, j, ec, board);
+                if(!res)
+                    return false;
             }
         }
 
