@@ -6,7 +6,7 @@ public:
         if(n < k)
             return false;
         unordered_set<string> st;
-        int noOfSub = pow(2, k);
+        int noOfSub = (1 << k);
 
         for(int i = k; i <= n; i++) {
 
