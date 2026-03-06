@@ -14,10 +14,11 @@ public:
                     i++;
                 segments++;
             } 
-            else {
-                while(i < n && (s[i] == '0'))
-                    i++;
-            }
+            // else {
+            //     while(i < n && (s[i] == '0'))
+            //         i++;
+            // }
+            i++;
         }
         
         return (segments == 1);
