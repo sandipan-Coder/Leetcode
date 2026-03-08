@@ -29,8 +29,6 @@ private:
 
         while(ans.size() != n)
             ans += '0';
-        
-        // reverse(ans.begin(), ans.end());
     
         return ans;
     }
