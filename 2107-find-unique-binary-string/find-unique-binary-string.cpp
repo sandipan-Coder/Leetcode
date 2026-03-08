@@ -1,6 +1,8 @@
 class Solution {
 private:
-
+    
+    // This function is for approach 1
+    // This function convert every string into base 10th number.
     int convert_number(string str) {
 
         int len = str.length();
@@ -16,6 +18,8 @@ private:
         return num;
     }
 
+    // This function is for approach 1.
+    // This function convert number into string.
     string stringConversion(int num, int &n) {
 
         string ans = "";
@@ -33,9 +37,27 @@ private:
         return ans;
     }
 
-public:
-    string findDifferentBinaryString(vector<string>& nums) {
-        
+    // This function is for approach 2.
+    // This function convert number into string.
+    string string_conversion(int num, int &n) {
+
+        string ans = "";
+
+        while(num) {
+
+            int rem = num % 2;
+            ans = to_string(rem) + ans;
+            num /= 2;
+        }
+
+        while(ans.size() != n)
+            ans = '0' + ans;
+    
+        return ans;
+    }
+
+    string approach1 (vector<string>& nums) {
+
         int n = nums.size();
         int no_of_element = (2 << n);
         vector<int> elements(no_of_element, 0);
@@ -52,6 +74,41 @@ public:
                 return stringConversion(i, n);
         }
 
-        return "-1";
+        return " ";
+    }
+
+    string approach2 (vector<string>& nums) {
+
+        int n = nums.size();
+        int no_of_element = (2 << n);
+        int j = 0;
+        sort(nums.begin(), nums.end());
+
+        for(int i = 0; i < no_of_element; i++) {
+
+            string str = string_conversion(i, n);
+
+            if(j < n && str == nums[j])
+                j++;
+            else
+                return str;
+        }
+
+        return " ";
+    }
+
+public:
+    string findDifferentBinaryString(vector<string>& nums) {
+        
+        // Brute forece 
+        // Time Complexity: O(n² + 2ⁿ) 
+        // Space Complexity: O(2ⁿ)
+        /*
+        return approach1(nums);
+        */
+
+
+        // Optimal 
+        return approach2(nums);
     }
 };
