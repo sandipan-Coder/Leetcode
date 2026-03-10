@@ -28,10 +28,33 @@ private:
         return dp[idx] = max(take, leave);
     }
 
+    int solveBottom(vector<int>& nums) {
+
+        int n = nums.size();
+        int dp1[103];
+        memset(dp1, 0, sizeof(dp1));
+
+        dp1[n - 1] = nums[n - 1];
+
+        for(int idx = n-2; idx >= 0; idx--) {
+
+            int take = nums[idx] + dp1[idx + 2];
+            int leave = dp1[idx + 1];
+        
+            dp1[idx] = max(take, leave);
+        }
+
+        return dp1[0];
+    }
+
 public:
     int rob(vector<int>& nums) {
         
+        /*
         memset(dp, -1, sizeof(dp));
         return solveMem(0, nums);
+        */
+
+        return solveBottom(nums);
     }
 };
