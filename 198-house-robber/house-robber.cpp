@@ -47,6 +47,26 @@ private:
         return dp1[0];
     }
 
+    int spaceOptimization(vector<int>& nums) {
+
+        int n = nums.size();
+        int prev = nums[n - 1];
+        int pPrev = 0;
+
+        for(int idx = n-2; idx >= 0; idx--) {
+
+            int take = nums[idx] + pPrev;
+            int leave = prev;
+        
+            int curr = max(take, leave);
+
+            pPrev = prev;
+            prev = curr;
+        }
+
+        return prev;
+    }
+
 public:
     int rob(vector<int>& nums) {
         
@@ -55,6 +75,10 @@ public:
         return solveMem(0, nums);
         */
 
+        /*
         return solveBottom(nums);
+        */
+
+        return spaceOptimization(nums);
     }
 };
