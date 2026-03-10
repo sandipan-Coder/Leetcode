@@ -27,6 +27,21 @@ private:
         return dp1[0];
     }
 
+    int spaceOptimization(int n) {
+
+        int prev = 1;
+        int pPrev = 0;
+
+        for(int i = n-1; i >= 0; i--) {
+
+            int curr = (prev + pPrev);
+            pPrev = prev;
+            prev = curr;
+        }
+            
+        return prev;
+    }
+
 public:
     int climbStairs(int n) {
         
@@ -35,6 +50,10 @@ public:
         return solve(0, n);
         */
 
+        /*
         return solveBottom(n);
+        */
+
+        return spaceOptimization(n);
     }
 };
