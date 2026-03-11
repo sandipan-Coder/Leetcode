@@ -14,10 +14,7 @@ private:
             num = (num >> 1);
         }
 
-        // reverse(ans.begin(), ans.end());
-
         // Remove starting 1's
-        // int idx = 0;
         int len = ans.length() - 1;
         string sub;
 
@@ -39,12 +36,12 @@ public:
         if(n == 0)
             return 1;
 
+        /*
         string binary = numberToBinary(n);
         
         if(binary == "-1")
             return 0;
         
-        // reverse(binary.begin(), binary.end());
         int len = binary.length();
         int ans = 0;
 
@@ -57,5 +54,12 @@ public:
         }
 
         return ans;
+
+        */
+
+        int bits = floor(log2(n)) + 1;  // It count no. of bits required for reperesent num.
+        int mask = (1 << bits) - 1;
+
+        return (mask ^ n);
     }
 };
