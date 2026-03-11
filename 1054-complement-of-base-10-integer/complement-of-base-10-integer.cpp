@@ -14,20 +14,20 @@ private:
             num = (num >> 1);
         }
 
-        reverse(ans.begin(), ans.end());
+        // reverse(ans.begin(), ans.end());
 
         // Remove starting 1's
-        int idx = 0;
-        int len = ans.length();
+        // int idx = 0;
+        int len = ans.length() - 1;
         string sub;
 
-        while(idx < len && ans[idx] == '1')
-            idx++;
+        while(len >= 0 && ans[len] == '1')
+            len--;
         
-        if(idx == len)
+        if(len < 0)
             return "-1";
         else
-            sub = ans.substr(idx);
+            sub = ans.substr(0, len + 1);
 
         return sub;
     }
@@ -44,7 +44,7 @@ public:
         if(binary == "-1")
             return 0;
         
-        reverse(binary.begin(), binary.end());
+        // reverse(binary.begin(), binary.end());
         int len = binary.length();
         int ans = 0;
 
