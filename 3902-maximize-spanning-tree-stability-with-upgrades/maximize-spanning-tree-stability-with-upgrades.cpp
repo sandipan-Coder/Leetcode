@@ -52,6 +52,7 @@ private:
 
         DisjointSet DSU(n);
 
+        // This store the updated stability edges.
         vector<vector<int>> upgradeCandidates;
 
         for(auto edge: edges) {
@@ -64,20 +65,21 @@ private:
 
             if(m == 1) {
                 
-                if(s < mid)
+                if(s < mid) // if stability is smaller then mid, this mid is not possible.
                     return false;
                 
                 DSU.unionByRank(u, v);
 
             } else {
                 
-                if(s >= mid)
+                if(s >= mid) // if stability is already bigger then mid, not required to change the strength of an edge.
                     DSU.unionByRank(u, v);
                 else if ((2 * s) >= mid) 
                     upgradeCandidates.push_back({u, v});
             }
         }
 
+        // Try to connect all updated strength edges.
         for(auto &edge: upgradeCandidates) {
 
             int u = edge[0];
@@ -93,7 +95,7 @@ private:
             }
         }
 
-        
+        // Now check if all nodes has only one parent or not.
         int root = DSU.findUPar(0);
         for(int node = 1; node < n; node++) {
             if(DSU.findUPar(node) != root)
@@ -118,16 +120,16 @@ public:
 
             if(m == 1) {
 
-                if(DSU.findUPar(u) == DSU.findUPar(v))
+                if(DSU.findUPar(u) == DSU.findUPar(v))  // If it formed cycle.
                     return -1;
                 
                 DSU.unionByRank(u, v);
             }
         }
 
-        int low = 1; 
+        int low = 0; 
         int high = 2 * 1e5;
-        int ans = -1;
+        // int ans = -1;
 
         while(low <= high) {
 
@@ -135,12 +137,12 @@ public:
 
             if(isPossible(n, edges, k, mid)) {
                 low = mid + 1;
-                ans = mid;
+                // ans = mid;
             }
             else
                 high = mid - 1;
         }
 
-        return ans;
+        return high;
     }
 };
