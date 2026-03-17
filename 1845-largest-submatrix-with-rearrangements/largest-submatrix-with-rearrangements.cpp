@@ -23,6 +23,9 @@ public:
             int height = INT_MAX;
             for(int j = 0; j < m; j++) {
                 
+                if(matrix[i][j] == 0)
+                    break;
+
                 height = min(height, matrix[i][j]);
                 int Area = (height * (j + 1));
                 area = max(area, Area);
