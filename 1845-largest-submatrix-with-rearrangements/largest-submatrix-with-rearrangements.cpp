@@ -7,16 +7,12 @@ public:
         int area = 0;
 
         for(int j = 0; j < m; j++) {
-            int count = 0;
-            for(int i = 0; i < n; i++) {
+            for(int i = 1; i < n; i++) {
 
-                if(matrix[i][j] == 0) {
-                    count = 0;
-                }
-                else {
-                    count++;
-                    matrix[i][j] = count;
-                }
+                if(matrix[i][j] == 0) 
+                    continue;
+                else
+                    matrix[i][j] += matrix[i - 1][j];
             }
         }
 
