@@ -32,16 +32,19 @@ public:
                     prefixSum[i][j] -= prefixSum[i - 1][j - 1];
                     countX[i][j] -= countX[i - 1][j - 1];
                 }
-            }
-        }
-
-        for(int i = 0; i < n; i++) {
-            for(int j = 0; j < m; j++) {
 
                 if(prefixSum[i][j] == 0 && countX[i][j] > 0)
                     ans++;
             }
         }
+
+        // for(int i = 0; i < n; i++) {
+        //     for(int j = 0; j < m; j++) {
+
+        //         if(prefixSum[i][j] == 0 && countX[i][j] > 0)
+        //             ans++;
+        //     }
+        // }
 
         return ans;
     }
