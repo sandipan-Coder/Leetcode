@@ -1,7 +1,8 @@
 class Solution {
-public:
-    vector<int> productExceptSelf(vector<int>& nums) {
-        
+private:
+
+    vector<int> approach1(vector<int> &nums) {
+
         int n = nums.size();
         vector<int> prefix(n , 1);
         vector<int> suffix(n, 1);
@@ -24,5 +25,32 @@ public:
         }
 
         return ans;
+    }
+
+    vector<int> approach2(vector<int> &nums) {
+
+        int n = nums.size();
+        vector<int> ans(n,1);
+
+        for (int i = 1; i < n; i++)
+            ans[i] = (ans[i-1] *nums[i-1]);
+        
+        int suffix = 1;
+        for (int i = n-2; i >= 0; i--){
+            suffix *= nums[i+1];
+            ans[i] *= suffix;
+        }
+       
+        return ans;
+    }
+
+public:
+    vector<int> productExceptSelf(vector<int>& nums) {
+        
+        // vector<int> ans1 = approach1(nums);
+        // return ans1;
+
+        vector<int> ans2 = approach2(nums);
+        return ans2;
     }
 };
