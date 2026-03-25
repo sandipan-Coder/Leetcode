@@ -21,6 +21,9 @@ public:
                 q.push(i);
         }
 
+        if(q.empty())
+            return {};
+
         while(!q.empty()) {
 
             int node = q.front();
