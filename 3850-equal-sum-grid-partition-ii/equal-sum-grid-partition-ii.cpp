@@ -1,91 +1,73 @@
 class Solution {
+
+    typedef long long ll;
+    ll totalSum = 0;
+
 private:
 
-    bool check(unordered_map<long long,int>& mp, vector<vector<int>>& grid,
-           int r1, int r2, int c1, int c2, long long diff) {
+    bool check_Horizontal_Cut(vector<vector<int>>& arr) {
 
-        int rows = r2 - r1 + 1;
-        int cols = c2 - c1 + 1;
+        int n = arr.size();
+        int m = arr[0].size();
+        ll topSum = 0;
+        unordered_set<ll> st;
 
-        // single cell
-        if (rows * cols == 1) return false;
+        for(int i = 0; i < n-1; i++) {
+            for(int j = 0; j < m; j++) {
 
-        // 1D row
-        if (rows == 1) {
-            return (grid[r1][c1] == diff || grid[r1][c2] == diff);
+                topSum += arr[i][j];
+                st.insert(arr[i][j]);
+            }
+
+            ll bottomSum = (totalSum - topSum);
+            ll diff = (topSum - bottomSum);
+
+            if(diff == 0)
+                return true;
+            if(diff == (ll)arr[0][0])
+                return true;
+            if(diff == (ll)arr[0][m - 1])
+                return true;
+            if(diff == (ll)arr[i][0])
+                return true;
+            
+            if(i > 0 && m > 1 && st.count(diff))
+                return true;
         }
 
-        // 1D column
-        if (cols == 1) {
-            return (grid[r1][c1] == diff || grid[r2][c1] == diff);
-        }
-
-        return mp[diff]>0;
+        return false;
     }
 
 public:
     bool canPartitionGrid(vector<vector<int>>& grid) {
         
-        int m = grid.size(), n = grid[0].size();
+        int n = grid.size();
+        int m = grid[0].size();
+        vector<vector<int>> transposeMatrix(m, vector<int>(n, 0));
 
-        long long total = 0;
-        unordered_map<long long,int> bottomMap,topMap, leftMap, rightMap;
+        for(int i = 0; i < n; i++) {
+            for(int j = 0; j < m; j++){
 
-        // Initialize bottomMap and rightMap
-        for (auto &row : grid) {
-            for (int x : row) {
-                total += x;
-                bottomMap[x]++;
-                rightMap[x]++;
+                totalSum += grid[i][j];
+                transposeMatrix[j][i] = grid[i][j];
             }
         }
 
-        long long sumTop = 0;
+        if(check_Horizontal_Cut(grid))
+            return true;
+        
+        reverse(begin(grid), end(grid));
 
-        // Horizontal cuts
-        for (int i = 0; i < m - 1; i++) {
-            for (int j = 0; j < n; j++) {
-                int val = grid[i][j];
-                sumTop += val;
+        if(check_Horizontal_Cut(grid))
+            return true;
 
-                topMap[val]++;
-                bottomMap[val]--;
-            }
+        if(check_Horizontal_Cut(transposeMatrix))
+            return true;
 
-            long long sumBottom = total - sumTop;
+        reverse(begin(transposeMatrix), end(transposeMatrix));
 
-            if (sumTop == sumBottom) return true;
-
-            long long diff = abs(sumTop - sumBottom);
-
-            if (sumTop > sumBottom) {
-                if (check(topMap, grid, 0, i, 0, n-1, diff)) return true;
-            } else {
-                if (check(bottomMap, grid, i+1, m-1, 0, n-1, diff)) return true;
-            }
-        }
-
-        long long sumLeft = 0;
-        for (int j = 0; j < n - 1; j++) {
-            for (int i = 0; i < m; i++) {
-                int val = grid[i][j];
-                sumLeft += val;
-
-                leftMap[val]++;
-                rightMap[val]--;
-            }
-
-            long long sumRight = total - sumLeft;
-            if (sumLeft == sumRight) return true;
-
-            long long diff = abs(sumLeft - sumRight);
-
-            if (sumLeft > sumRight) {
-                if (check(leftMap, grid, 0, m-1, 0, j, diff)) return true;
-            } else {
-                if (check(rightMap, grid, 0, m-1, j+1, n-1, diff)) return true;
-            }
-        }
+        if(check_Horizontal_Cut(transposeMatrix))
+            return true;
 
         return false;
     }
