@@ -1,18 +1,20 @@
 class Solution {
 private:
 
-    void left_shift(vector<int> &arr){
+    void left_shift(vector<int> &arr, int k){
 
-        reverse(arr.begin() + 1, arr.end());
+        reverse(arr.begin(), arr.begin() + k);
+        reverse(arr.begin() + k, arr.end());
         reverse(arr.begin(), arr.end());
 
         return;
     }
 
-    void right_shift(vector<int> &arr){
+    void right_shift(vector<int> &arr, int k){
 
         reverse(arr.begin(), arr.end());
-        reverse(arr.begin() + 1, arr.end());
+        reverse(arr.begin(), arr.begin() + k);
+        reverse(arr.begin() + k, arr.end());
 
         return;
     }
@@ -28,18 +30,13 @@ public:
         count = (count % m);
         if(count == 0)
             return true;
-        
-        while(count){
 
-            for(int i = 0; i < n; i++) {
+        for(int i = 0; i < n; i++) {
 
-                if(i % 2) 
-                    right_shift(grid[i]);
-                else
-                    left_shift(grid[i]);
-            }
-
-            count--;
+            if(i % 2) 
+                right_shift(grid[i], count);
+            else
+                left_shift(grid[i], count);
         }
 
         return (grid == mat);
