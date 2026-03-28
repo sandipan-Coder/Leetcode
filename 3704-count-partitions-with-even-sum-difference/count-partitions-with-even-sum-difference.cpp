@@ -8,16 +8,13 @@ public:
 
         for(int &num: nums){
 
-            if(leftSum == 0)
-                leftSum = num;
-            else{
+            leftSum += num;
+            if(leftSum == totalSum)
+                break;
 
-                int rightSum = totalSum - leftSum;
-                if(abs(leftSum - rightSum) % 2 == 0)
-                    count++;
-                
-                leftSum += num;
-            }
+            int rightSum = totalSum - leftSum;
+            if(abs(leftSum - rightSum) % 2 == 0)
+                count++;
         }
 
         return count;
