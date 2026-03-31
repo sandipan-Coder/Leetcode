@@ -61,6 +61,31 @@ private:
         return dp[0][1];
     }
 
+    // Space Optimization
+    int solveSpace(vector<int>& prices) {
+
+        vector<int> prev(2, 0);
+        vector<int> pPrev(2, 0);
+        vector<int> curr(2, 0);
+
+        for(int idx = n-1; idx >= 0; idx--) {
+            for(int buy = 0; buy <= 1; buy++){
+
+                if(buy) {
+                    curr[buy] = max((-prices[idx] + prev[0]), (0 + prev[1]));
+                } else {
+                    curr[buy] = max((prices[idx] + pPrev[1]), (0 + prev[0]));
+                }
+            }
+
+            pPrev = prev;
+            prev = curr;
+        }       
+
+        return curr[1];
+    }
+
+
 public:
     int maxProfit(vector<int>& prices) {
         
@@ -78,6 +103,11 @@ public:
         */
 
         // Tabulation
+        /*
         return solveTab(prices);
+        */
+
+        // Space Optimization
+        return solveSpace(prices);
     }
 };
