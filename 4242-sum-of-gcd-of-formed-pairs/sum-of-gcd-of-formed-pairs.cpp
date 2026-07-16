@@ -35,7 +35,7 @@ public:
             long long num1 = prefixGCD[i];
             long long num2 = prefixGCD[j];
 
-            long long gcd = __gcd(num1, num2);
+            long long gcd = findGCD(num1, num2);
             ans += gcd;
 
             i++;
