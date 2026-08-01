@@ -1,6 +1,8 @@
 class Solution {
 private:
 
+    int dp[23][23];
+
     int solve(int i, int j, vector<int>& nums){
 
         if(i > j)
@@ -8,12 +10,15 @@ private:
         
         if(i == j)
             return nums[i];
+        
+        if(dp[i][j] != -1)
+            return dp[i][j];
 
         int take_i = nums[i] + min(solve(i+2, j, nums), solve(i+1, j-1, nums));
 
         int take_j = nums[j] + min(solve(i, j-2, nums), solve(i+1, j-1, nums));
 
-        return max(take_i, take_j);
+        return dp[i][j] = max(take_i, take_j);
     }
 
 public:
@@ -21,6 +26,7 @@ public:
         
         int n = nums.size();
         int sum = accumulate(nums.begin(), nums.end(), 0);
+        memset(dp, -1, sizeof(dp));
 
         int player1_score = solve(0, n-1, nums);
         int player2_score = (sum - player1_score);
