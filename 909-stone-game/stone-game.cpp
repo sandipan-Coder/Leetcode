@@ -3,6 +3,18 @@ private:
 
     int dp[502][502];
 
+    bool approach1(vector<int>& piles){
+
+        int n = piles.size();
+        int total_stone = accumulate(piles.begin(), piles.end(), 0);
+        memset(dp, -1, sizeof(dp));
+
+        int alice = solve(0, n-1, piles);
+        int bob = total_stone - alice;
+
+        return (alice > bob);
+    }
+
     int solve(int i, int j, vector<int>& piles){
 
         if(i > j)
@@ -24,13 +36,11 @@ private:
 public:
     bool stoneGame(vector<int>& piles) {
         
-        int n = piles.size();
-        int total_stone = accumulate(piles.begin(), piles.end(), 0);
-        memset(dp, -1, sizeof(dp));
+        // Aproach 1 -> (Recursion, DP, Memoization)
+        /*
+        return approach1(piles);
+        */
 
-        int alice = solve(0, n-1, piles);
-        int bob = total_stone - alice;
-
-        return (alice > bob);
+        return true;
     }
 };
