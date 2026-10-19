@@ -3,13 +3,29 @@ public:
     vector<int> targetIndices(vector<int>& nums, int target) {
         
         int n = nums.size();
-        sort(nums.begin(), nums.end());
+        int count = 0;
+        int smallest = 0;
         vector<int> ans;
 
-        for(int i = 0; i < n; i++){
+        for(int &ele: nums){
 
-            if(nums[i] == target)
-                ans.push_back(i);
+            if(ele == target)
+                count++;
+            
+            if(ele < target)
+                smallest++;
+        }
+
+        if(count == 0)
+            return ans;
+        
+        int idx = (smallest - 1);
+    
+        while(count){
+
+            idx++;
+            ans.push_back(idx);
+            count--;
         }
 
         return ans;
